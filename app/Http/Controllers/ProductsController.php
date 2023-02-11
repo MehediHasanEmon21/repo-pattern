@@ -19,16 +19,38 @@ class ProductsController extends Controller
         $this->productRepository = $productRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+ /**
+     * @OA\Get(
+     *     path="/api/products",
+     *     tags={"Products"},
+     *     summary="Get All Prroducts",
+     *     description="Multiple status values can be provided with comma separated string",
+     *     operationId="index",
+     *     @OA\Parameter(
+     *         name="perPage",
+     *         in="query",
+     *         description="Status values that needed to be considered for filter",
+     *         required=true,
+     *         explode=true,
+     *         @OA\Schema(
+     *             default="10",
+     *             type="integer",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="successful operation",
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid status value"
+     *     )
+     * )
      */
-    
     public function index(): JsonResponse
     {
         try {
-            return $this->responseSuccess($this->productRepository->getAll(), 'Successfully Done');
+            return $this->responseSuccess($this->productRepository->getAll(request()->perPage), 'Successfully Done');
         } catch (Exception $e) {
             return $this->responseError([], $e->getMessage());
         }
