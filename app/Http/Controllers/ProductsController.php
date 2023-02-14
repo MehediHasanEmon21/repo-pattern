@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCreateRequest;
 use App\Repositories\ProductRepository;
 use Exception;
 use App\Traits\ResponseTrait;
@@ -50,31 +51,19 @@ class ProductsController extends Controller
     public function index(): JsonResponse
     {
         try {
-            return $this->responseSuccess($this->productRepository->getAll(request()->perPage), 'Successfully Done');
-        } catch (Exception $e) {
-            return $this->responseError([], $e->getMessage());
+            return $this->responseSuccess($this->productRepository->getAll(request()->all()), 'Successfully Done');
+        } catch (Exception $exception) {
+            return $this->responseError([], $exception->getMessage(), $exception->getCode());
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(ProductCreateRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        try {
+            return $this->responseSuccess($this->productRepository->create($request->validated()), 'Successfully Product Created');
+        } catch (Exception $exception) {
+            return $this->responseError([], $exception->getMessage(), $exception->getCode());
+        }
     }
 
     /**
