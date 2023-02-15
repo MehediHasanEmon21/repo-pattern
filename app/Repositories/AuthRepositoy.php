@@ -44,22 +44,22 @@ class AuthRepositoy {
 
     }
 
-    public function findUserByEmail(string $email): ?User
+    private function findUserByEmail(string $email): ?User
     {
         return User::where('email',$email)->first();
     }
 
-    public function isValidPassword(array $data, User $user): bool
+    private function isValidPassword(array $data, User $user): bool
     {
         return Hash::check($data['password'], $user->password);
     }
 
-    public function createAuthToken(User $user): PersonalAccessTokenResult
+    private function createAuthToken(User $user): PersonalAccessTokenResult
     {
         return $user->createToken('authToken');
     }
 
-    public function getAuthData(User $user,  PersonalAccessTokenResult $tokenInstance)
+    private function getAuthData(User $user,  PersonalAccessTokenResult $tokenInstance)
     {
 
         return [
@@ -71,7 +71,7 @@ class AuthRepositoy {
 
     }
 
-    public function prepareDataForRegister(array $data): array
+    private function prepareDataForRegister(array $data): array
     {
         return [
             'name' => $data['name'],

@@ -31,7 +31,7 @@ class ProductRepository implements CrudInterface, DBPreparableInterface
         return $query->paginate($filter['perPage']);
     }
 
-    public function getFilterData(array $filterData): array
+    private function getFilterData(array $filterData): array
     {
 
         $defaultArs = [
@@ -107,7 +107,7 @@ class ProductRepository implements CrudInterface, DBPreparableInterface
         return $data;
     }
 
-    public function createUniqueSlug(array $data): string
+    private function createUniqueSlug(array $data): string
     {
         $slug = Product::where('slug', Str::slug($data['title']))->exists();
 
@@ -118,14 +118,14 @@ class ProductRepository implements CrudInterface, DBPreparableInterface
         return Str::slug($data['title']);
     }
 
-    public function uploadImage($image): string
+    private function uploadImage($image): string
     {
         $imageName = time() . '.' . $image->extension();
         $image->storePubliclyAs('public/product', $imageName);
         return $imageName;
     }
 
-    public function deleteImage($imageUrl): void
+    private function deleteImage($imageUrl): void
     {
         if (!empty($imageUrl)) {
             $imageName = ltrim(strstr($imageUrl, 'storage/product/'), 'storage/product/');
